@@ -20,6 +20,7 @@ CREATE TABLE Flowvisor (
   config_name VARCHAR(100) UNIQUE DEFAULT 'default',
   clear_flow_table BOOLEAN DEFAULT false,
   db_version INT,
+  fscache INT DEFAULT 30,
   PRIMARY KEY (id));
 
 CREATE TABLE Slice (
@@ -36,6 +37,7 @@ CREATE TABLE Slice (
   drop_policy VARCHAR(10) DEFAULT 'exact' ,
   lldp_spam BOOLEAN  DEFAULT true,
   max_flow_rules INT NOT NULL DEFAULT -1,
+  admin_status BOOLEAN DEFAULT TRUE,
   PRIMARY KEY (id));
 
 CREATE INDEX flowvisor_index ON Slice (flowvisor_id ASC);
@@ -83,6 +85,7 @@ CREATE TABLE FlowSpaceRule (
   tp_dst SMALLINT,
   forced_queue INT DEFAULT -1,
   wildcards INT,
+  name VARCHAR(64),
   PRIMARY KEY (id));
 
 CREATE INDEX prio_index ON FlowSpaceRule (priority ASC);
@@ -119,6 +122,7 @@ CREATE TABLE jSliceSwitchLimits (
     slice_id INT NOT NULL,
     switch_id INT NOT NULL,
     maximum_flow_mods INT NOT NULL DEFAULT -1,
+    rate_limit INT NOT NULL DEFAULT -1,
     PRIMARY KEY (id));
 
 CREATE INDEX slice_limit_index ON jSliceSwitchLimits (slice_id ASC);

@@ -156,7 +156,8 @@ public class FVConfig {
 	}
 	
 	public static synchronized String getConfig() throws FileNotFoundException  {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	public static synchronized String getConfig() {
+  		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		HashMap<String, Object> output = new HashMap<String, Object>();
 		FlowvisorImpl.getProxy().toJson(output);
 		SliceImpl.getProxy().toJson(output);
