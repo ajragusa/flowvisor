@@ -41,7 +41,7 @@ public class FlowVisor {
 
 	// VERSION
 	public final static String FLOWVISOR_VERSION = "flowvisor-0.10.0";
-	public final static int FLOWVISOR_DB_VERSION = 1;
+	public final static int FLOWVISOR_DB_VERSION = 2;
 
 
 	// Max slicename len ; used in LLDP for now; needs to be 1 byte
@@ -164,9 +164,9 @@ public class FlowVisor {
 		// init topology discovery, if configured for it
 		if (TopologyController.isConfigured())
 			handlers.add(TopologyController.spawn(pollLoop));
-
+		
 		// init switchAcceptor
-		OFSwitchAcceptor acceptor = new OFSwitchAcceptor(pollLoop, port, 16);
+		OFSwitchAcceptor acceptor = new OFSwitchAcceptor(pollLoop, port, 16,FVConfig.getClearFlowTableOnConnect());
 		acceptor.setSlicerLimits(sliceLimits);
 		handlers.add(acceptor);
 		// start XMLRPC UserAPI server; FIXME not async!
@@ -431,7 +431,7 @@ public class FlowVisor {
 	public static void updateDB() {
 		int db_version = FlowvisorImpl.getProxy().fetchDBVersion();
 		if (db_version == FLOWVISOR_DB_VERSION)
-			return;
+		    			return;
 		if (db_version > FLOWVISOR_DB_VERSION)
 			FVLog.log(LogLevel.WARN, null, "Your FlowVisor comes from the future.");
 		FlowvisorImpl.getProxy().updateDB(db_version);

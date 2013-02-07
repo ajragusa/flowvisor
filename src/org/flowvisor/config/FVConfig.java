@@ -382,7 +382,17 @@ public class FVConfig {
 		else
 			return SwitchImpl.getProxy().getFloodPerm(dpid);
 	}
-	
+    
+        public static Boolean getClearFlowTableOnConnect(int id) throws ConfigError {
+	    Flowvisor proxy= FlowvisorImpl.getProxy();
+	    return proxy.getClearFlowTableOnConnect(id);
+	}
+
+        public static Boolean getClearFlowTableOnConnect() throws ConfigError {
+	    Flowvisor proxy= FlowvisorImpl.getProxy();
+            return proxy.getClearFlowTableOnConnect();
+	}
+
 	public static Boolean getTopologyServer(int id) throws ConfigError {
 		Flowvisor proxy = FlowvisorImpl.getProxy();
 		return proxy.getTopologyServer(id);
@@ -473,8 +483,15 @@ public class FVConfig {
 		proxy.setAPIWSPort(id, port);
 	}
 	
+        public static void setClearFlowTableOnConnect(int id, Boolean clear_flow_table) throws ConfigError {
+	    Flowvisor proxy = FlowvisorImpl.getProxy();
+	    proxy.setClearFlowTableOnConnect(id,clear_flow_table);
+	}
 	
-	
+        public static void setClearFlowTableOnConnect(Boolean clear_flow_table) throws ConfigError {
+	    Flowvisor proxy= FlowvisorImpl.getProxy();
+	    proxy.setClearFlowTableOnConnect(1,clear_flow_table);
+        }
 	
 	/*public static boolean confirm(String base) {
 		return (lookup(base) != null);

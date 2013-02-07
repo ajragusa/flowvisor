@@ -103,7 +103,10 @@ public class FVCtl {
 		new APICmd("registerCallback", 3, "<URL> <methodName> <cookie>"),
 		new APICmd("registerTopologyEventCallback", 3, "<URL> <methodName> <eventType>"),
 		new APICmd("deregisterTopologyEventCallback", 2, "<method> <eventType>"),
-		new APICmd("unregisterCallback", 0), };
+		new APICmd("unregisterCallback", 0),
+		new APICmd("getClearFlowTableOnConnect",0),
+		new APICmd("setClearFlowTableOnConnect",1,"<true|false>")
+ };
 
 	static class APICmd {
 		String name;
@@ -717,8 +720,33 @@ public class FVCtl {
 			System.err.println("failed!");
 	}
 	
-	public void run_setFlowTracking(String val) throws IOException, XmlRpcException,
-												MalformedURLException {
+        public void run_setClearFlowTableOnConnect(String val) throws IOException, XmlRpcException, MalformedURLException{
+	    Boolean reply = (Boolean) this.client.execute("api.setClearFlowTableOnConnect", new Object[] {val});
+	    if (reply == null) {
+		System.err.println("Got 'null' for reply :-(");
+		System.exit(-1);
+	    }
+	    if (reply)
+		System.out.println("success!");
+	    else
+		System.err.println("failure!");
+	}
+
+    public void run_getClearFlowTableOnConnect() throws IOException, XmlRpcException, MalformedURLException {
+	Boolean reply = (Boolean) this.client.execute("api.getClearFlowTableOnConnect", new Object[] {});
+	if (reply == null) {
+	    System.err.println("Got 'null' for reply :-(");
+	    System.exit(-1);
+	}
+	if (reply != null)
+	    if(reply){
+		System.out.println("Clear Flow Table on Connect is enabled");
+	    }else{
+		System.out.println("Clear Flow Table on Connect is disabled");
+	    }
+    }
+
+	public void run_setFlowTracking(String val) throws IOException, XmlRpcException, MalformedURLException {
 		Boolean reply = (Boolean) this.client.execute(
 				"api.setFlowTracking", new Object[] {val});
 		if (reply == null) {

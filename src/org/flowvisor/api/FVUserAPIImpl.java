@@ -774,6 +774,38 @@ public class FVUserAPIImpl extends BasicJSONRPCService implements FVUserAPI {
 	}
 
 	
+        public Boolean getClearFlowTableOnConnect() throws PermissionDeniedException{
+	    String user = APIUserCred.getUserName();
+	    if (!FVConfig.isSupervisor(user))
+		throw new PermissionDeniedException("User " + user
+                                        + " does not have perms to obtain the status of the cleaFlowTableOnConnect");
+	    FVLog.log(LogLevel.DEBUG, null, "returning the status of clearFlowTableOnConnect");
+	    try{
+		return FlowvisorImpl.getProxy().getClearFlowTableOnConnect();
+	    } catch (ConfigError e){
+		FVLog.log(LogLevel.ALERT, null, "Unable to get the current clearFlowTableOnConnect value :", e.getMessage());
+	    }
+	    return null;
+	}
+
+        @Override
+	public Boolean setClearFlowTableOnConnect(String clear_flow_table) throws PermissionDeniedException {
+	    String user = APIUserCred.getUserName();
+	    if (!FVConfig.isSupervisor(user))
+		throw new PermissionDeniedException("User " + user
+                                        + " does not have perms to change the clearFlowTableOnConnect value");
+	    FVLog.log(LogLevel.DEBUG, null, "Setting default ClearFlowTableOnConnect to " + clear_flow_table);
+	   
+	    boolean clear_flow_table_value = Boolean.parseBoolean(clear_flow_table);
+	    try{
+	    FlowvisorImpl.getProxy().setClearFlowTableOnConnect(clear_flow_table_value);
+	    } catch (ConfigError e){
+		FVLog.log(LogLevel.WARN, null, "Error setting clearFlowTableOnConnect : ", e.getMessage());
+	    }
+	    return true;
+        }
+
+
 	@Override
 	public String getFloodPerm(String dpidStr) throws PermissionDeniedException {
 		String user = APIUserCred.getUserName();

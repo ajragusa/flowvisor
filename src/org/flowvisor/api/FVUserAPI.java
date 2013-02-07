@@ -142,6 +142,9 @@ public interface FVUserAPI {
 			PermissionDeniedException, ConfigError;
 
 
+        public Boolean getClearFlowTableOnConnect() throws PermissionDeniedException;
+        public Boolean setClearFlowTableOnConnect(String clear_flow_table) throws PermissionDeniedException;
+
 
 	/**
 	 * Return a list of slices in the flowvisor: root only!

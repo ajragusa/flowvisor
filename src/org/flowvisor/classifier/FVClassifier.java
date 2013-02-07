@@ -233,18 +233,21 @@ public class FVClassifier implements FVEventHandler, FVSendMsg, FlowMapChangedLi
 	 * @throws IOException
 	 */
 
-	public void init() throws IOException {
+	public void init(boolean clear_flow_table) throws IOException {
 		// send initial handshake
 		sendMsg(new OFHello(), this);
-		// delete all entries in the flowtable
-		OFMatch match = new OFMatch();
-		match.setWildcards(OFMatch.OFPFW_ALL);
-		OFFlowMod fm = new OFFlowMod();
-		fm.setMatch(match);
-		fm.setCommand(OFFlowMod.OFPFC_DELETE);
-		fm.setOutPort(OFPort.OFPP_NONE);
-		fm.setBufferId(0xffffffff); // buffer to NONE
-		sendMsg(fm, this);
+		//check for the clear flow table
+		if(clear_flow_table){
+		    // delete all entries in the flowtable
+		    OFMatch match = new OFMatch();
+		    match.setWildcards(OFMatch.OFPFW_ALL);
+		    OFFlowMod fm = new OFFlowMod();
+		    fm.setMatch(match);
+		    fm.setCommand(OFFlowMod.OFPFC_DELETE);
+		    fm.setOutPort(OFPort.OFPP_NONE);
+		    fm.setBufferId(0xffffffff); // buffer to NONE
+		    sendMsg(fm, this);
+		}
 		// request the switch's features
 		sendMsg(new OFFeaturesRequest(), this);
 		msgStream.flush();

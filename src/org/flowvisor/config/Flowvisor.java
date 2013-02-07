@@ -26,6 +26,8 @@ public interface Flowvisor extends FVAppConfig {
 	public static String HOST = "host";
 	public static String CONFIG = "config_name";
 	public static String DB_VERSION = "db_version";
+        public static String CLEAR_FLOW_TABLE = "clear_table_on_connect";
+    
 	
 	// Table name
 	public static String FLOWVISOR = "flowvisor";
@@ -52,8 +54,9 @@ public interface Flowvisor extends FVAppConfig {
 	public String getLogFacility() throws ConfigError;
 	public Boolean getTopologyServer(int id) throws ConfigError;
 	public Boolean getTopologyServer() throws ConfigError;
-	
-	
+        public Boolean getClearFlowTableOnConnect(int id) throws ConfigError;
+        public Boolean getClearFlowTableOnConnect() throws ConfigError;
+
 	public void settrack_flows(Integer id, Boolean track_flows);
 	public void settrack_flows(Boolean track_flows);
 	public void setstats_desc_hack(Integer id, Boolean stats_desc_hack);
@@ -74,6 +77,8 @@ public interface Flowvisor extends FVAppConfig {
 	public void setAPIWSPort(Integer port) throws ConfigError;
 	public void setJettyPort(Integer id, Integer port) throws ConfigError;
 	public void setJettyPort(Integer port) throws ConfigError;
+        public void setClearFlowTableOnConnect(Integer id,Boolean clear_flow_table) throws ConfigError;
+        public void setClearFlowTableOnConnect(Boolean clear_flow_table) throws ConfigError;
 	
 	public int fetchDBVersion();
 	

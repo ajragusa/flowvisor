@@ -42,7 +42,7 @@ public class FlowvisorImpl implements Flowvisor {
  	private static String GLOGGING = "SELECT " + LOGGING + " FROM FlowVisor WHERE id = ?";
  	private static String GLOGFACILITY = "SELECT " + LOGFACILITY + " FROM FlowVisor WHERE id = ?";
  	private static String GTOPO = "SELECT " + TOPO + " FROM Flowvisor WHERE id = ?";
- 	
+        private static String GCLFLWTBL = "SELECT " + CLEAR_FLOW_TABLE + " from Flowvisor where id = ?";
  	
  	private static String STRACKID = "UPDATE Flowvisor SET " + TRACK + " = ? WHERE id = ?";
 	private static String SSTATSID = "UPDATE Flowvisor SET " + STATS + " = ? WHERE id = ?";
@@ -54,7 +54,8 @@ public class FlowvisorImpl implements Flowvisor {
 	private static String SLISTEN = "UPDATE Flowvisor SET " + LISTEN + " = ? WHERE id = ?";
 	private static String SAPIPORT = "UPDATE Flowvisor SET " + APIPORT + " = ? WHERE id = ?";
 	private static String SJETTYPORT = "UPDATE Flowvisor SET " + JETTYPORT + " = ? WHERE id = ?";
-	
+        private static String SCLFLWTBL = "UPDATE Flowvisor SET " + CLEAR_FLOW_TABLE + " = ? where id = ?";
+
 	private static String INSERT = "INSERT INTO " + FLOWVISOR + "(" + APIPORT + "," + 
 					JETTYPORT + "," + CHECKPOINT + "," + LISTEN + "," + TRACK + "," +
 					STATS + "," + TOPO + "," + LOGGING + "," + LOGIDENT + "," + LOGFACILITY + "," +
@@ -133,6 +134,7 @@ public class FlowvisorImpl implements Flowvisor {
 		return getListenPort(1);
 	}
 	
+
 	public Boolean getCheckPoint(Integer id) throws ConfigError {
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -367,7 +369,68 @@ public class FlowvisorImpl implements Flowvisor {
 		return getLogFacility(1);
 	}
 	
+        @Override
+	public Boolean getClearFlowTableOnConnect(int id) throws ConfigError {
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet set = null;
+	    try{
+		conn = settings.getConnection();
+		ps = conn.prepareStatement(GCLFLWTBL);
+		ps.setInt(1,id);
+		set = ps.executeQuery();
+		if(set.next())
+		    return set.getBoolean(CLEAR_FLOW_TABLE);
+		else
+		    throw new ConfigError("Clear Table on Connect not found");
+	    } catch (SQLException e) {
+		FVLog.log(LogLevel.WARN, null, e.getMessage());
+	    } finally {
+		close(set);
+		close(ps);
+		close(conn);
+
+	    }
+	    return null;
+
+	}
+
+        @Override
+            public Boolean getClearFlowTableOnConnect() throws ConfigError {
+            return getClearFlowTableOnConnect(1);
+        }
+
+
 	@Override
+	public void setClearFlowTableOnConnect(Integer id, Boolean clear_flow_table) throws ConfigError {
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet set = null;
+	    try {
+		conn = settings.getConnection();
+		ps = conn.prepareStatement(SCLFLWTBL);
+		ps.setBoolean(1, clear_flow_table);
+		ps.setInt(2, id);
+		if (ps.executeUpdate() == 0)
+		    FVLog.log(LogLevel.WARN, null, "setting clear flow table had no effect.");
+	    } catch (SQLException e) {
+		FVLog.log(LogLevel.WARN, null, e.getMessage());
+		throw new ConfigError("Unable to update clear flow table setting.");
+	    } finally {
+		close(set);
+		close(ps);
+		close(conn);
+	    }
+	    
+	}
+
+        @Override
+	public void setClearFlowTableOnConnect(Boolean clear_flow_table) throws ConfigError {
+	    setClearFlowTableOnConnect(1, clear_flow_table);
+        }
+
+
+        @Override
 	public Boolean getTopologyServer(int id) throws ConfigError {
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -901,6 +964,9 @@ public class FlowvisorImpl implements Flowvisor {
 		if (version == 0) {
 			processAlter("ALTER TABLE Flowvisor ADD COLUMN " + DB_VERSION + " INT");
 			version++;
+		}
+		if(version < 2){
+		    processAlter("ALTER TABLE FlowVisor ADD COLUMN " + CLEAR_FLOW_TABLE + " BOOLEAN DEFAULT FALSE");
 		}
 		processAlter("UPDATE FlowVisor SET " + DB_VERSION + " = " + FlowVisor.FLOWVISOR_DB_VERSION);
 		
