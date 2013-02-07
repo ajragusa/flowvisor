@@ -1046,11 +1046,6 @@ public class FlowvisorImpl implements Flowvisor {
 			} else {
 				System.err.println("DB Empty, assuming latest DB Version"); 
 				return FlowVisor.FLOWVISOR_DB_VERSION;
-			else {
-				System.err.println("Database empty, assuming latest DB Version.");
-				return FlowVisor.FLOWVISOR_DB_VERSION;
-				/*
-				System.exit(1);*/
 			}
 				
 		} catch (SQLException e) {

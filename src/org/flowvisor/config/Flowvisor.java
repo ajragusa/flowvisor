@@ -54,15 +54,9 @@ public interface Flowvisor extends FVAppConfig {
 	public String getLogFacility() throws ConfigError;
 	public Boolean getTopologyServer(int id) throws ConfigError;
 	public Boolean getTopologyServer() throws ConfigError;
-<<<<<<< HEAD
         public Boolean getClearFlowTableOnConnect(int id) throws ConfigError;
         public Boolean getClearFlowTableOnConnect() throws ConfigError;
-
-=======
 	public Integer getFlowStatsCache() throws ConfigError;
-	
-	
->>>>>>> 88a89cc147efa3034f5e6ca5b7da44a26d0db395
 	public void settrack_flows(Integer id, Boolean track_flows);
 	public void settrack_flows(Boolean track_flows);
 	public void setstats_desc_hack(Integer id, Boolean stats_desc_hack);
@@ -83,15 +77,9 @@ public interface Flowvisor extends FVAppConfig {
 	public void setAPIWSPort(Integer port) throws ConfigError;
 	public void setJettyPort(Integer id, Integer port) throws ConfigError;
 	public void setJettyPort(Integer port) throws ConfigError;
-<<<<<<< HEAD
         public void setClearFlowTableOnConnect(Integer id,Boolean clear_flow_table) throws ConfigError;
         public void setClearFlowTableOnConnect(Boolean clear_flow_table) throws ConfigError;
-=======
 	public void setFlowStatsCache(Integer timer) throws ConfigError;
-	
-	
->>>>>>> 88a89cc147efa3034f5e6ca5b7da44a26d0db395
-	
 	public int fetchDBVersion();
 	
 	

@@ -6,6 +6,8 @@ import org.flowvisor.config.FVConfig;
 
 import com.thetransactioncompany.jsonrpc2.JSONRPC2ParamsType;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
+import java.io.FileNotFoundException;
+
 
 public class SaveConfig implements ApiHandler<Object> {
 
@@ -14,10 +16,13 @@ public class SaveConfig implements ApiHandler<Object> {
 	@Override
 	public JSONRPC2Response process(Object params) {
 	
-			
+	    try{	
 		return new JSONRPC2Response(FVConfig.getConfig(), 0);
+	    }catch (FileNotFoundException e){
+
+	    }
 		
-		
+	    return null;
 	}
 
 	@Override
