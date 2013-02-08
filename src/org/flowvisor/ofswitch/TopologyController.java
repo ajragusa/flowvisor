@@ -61,9 +61,9 @@ public class TopologyController extends OFSwitchAcceptor {
 		TopologyController.runningInstance = tc;
 	}
 
-    private TopologyController(FVEventLoop pollLoop, int port, int backlog, boolean clear_flow_table)
+    private TopologyController(FVEventLoop pollLoop, int port, int backlog)
 			throws IOException {
-	        super(pollLoop, port, backlog, clear_flow_table);
+	        super(pollLoop, port, backlog);
 		this.topologyConnections = new LinkedList<TopologyConnection>();
 		this.latestProbes = new HashMap<LinkAdvertisement, Long>();
 		this.doCallback = false;
@@ -87,7 +87,7 @@ public class TopologyController extends OFSwitchAcceptor {
 			return null; // not configured for it
 		TopologyController tc = null;
 		try {
-		    tc = new TopologyController(pollLoop, 0, 16, FVConfig.getClearFlowTableOnConnect()); // 0 == any port
+		    tc = new TopologyController(pollLoop, 0, 16); // 0 == any port
 			int port = tc.getListenPort();
 			try {
 				FVConfig.setSliceHost(TopoUser, "localhost");
@@ -100,8 +100,6 @@ public class TopologyController extends OFSwitchAcceptor {
 		} catch (IOException e) {
 			FVLog.log(LogLevel.ALERT, null,
 					"failed to spawn TopologyController: " + e);
-		} catch (ConfigError e){
-		    FVLog.log(LogLevel.ALERT, null, "Unable to get the clearFlowTableOnConnect parameter: " + e);
 		}
 		return tc;
 	}

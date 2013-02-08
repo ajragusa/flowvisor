@@ -24,16 +24,14 @@ public class OFSwitchAcceptor implements FVEventHandler {
 
 	int backlog;
 	int listenPort;
-        boolean clear_table_on_connect;
 	ServerSocketChannel ssc;
 	List<FVClassifier> switches;
 
 	private SlicerLimits slicerLimits;
 
-        public OFSwitchAcceptor(FVEventLoop pollLoop, int port, int backlog, boolean clear_table_on_connect)
+        public OFSwitchAcceptor(FVEventLoop pollLoop, int port, int backlog)
 			throws IOException {
 		this.pollLoop = pollLoop;
-		this.clear_table_on_connect = clear_table_on_connect;
 		ssc = ServerSocketChannel.open();
 		ssc.socket().setReuseAddress(true);
 		try {
@@ -137,7 +135,7 @@ public class OFSwitchAcceptor implements FVEventHandler {
 			FVLog.log(LogLevel.INFO, this, "got new connection: " + sock);
 			FVClassifier fvc = new FVClassifier(pollLoop, sock);
 			fvc.setSlicerLimits(this.slicerLimits);
-			fvc.init(this.clear_table_on_connect);
+			fvc.init();
 		} catch (IOException e) // ignore IOExceptions -- is this the right
 		// thing to do?
 		{

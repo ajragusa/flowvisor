@@ -267,10 +267,17 @@ public class FVClassifier implements FVEventHandler, FVSendMsg, FlowMapChangedLi
 	 * @throws IOException
 	 */
 
-	public void init(boolean clear_flow_table) throws IOException {
+	public void init() throws IOException {
 		// send initial handshake
 		sendMsg(new OFHello(), this);
 		//check for the clear flow table
+		boolean clear_flow_table = false;
+		try{
+		    clear_flow_table = FVConfig.getClearFlowTableOnConnect();
+		}catch (ConfigError e){
+		    FVLog.log(LogLevel.WARN,this,"Error fetching getClearFLowTableOnConnect: " + e);
+		}
+		
 		if(clear_flow_table){
 		    // delete all entries in the flowtable
 		    OFMatch match = new OFMatch();
