@@ -166,7 +166,7 @@ public class FlowVisor {
 			handlers.add(TopologyController.spawn(pollLoop));
 		
 		// init switchAcceptor
-		OFSwitchAcceptor acceptor = new OFSwitchAcceptor(pollLoop, port, 16,FVConfig.getClearFlowTableOnConnect());
+		OFSwitchAcceptor acceptor = new OFSwitchAcceptor(pollLoop, port, 16);
 		acceptor.setSlicerLimits(sliceLimits);
 		handlers.add(acceptor);
 		// start XMLRPC UserAPI server; FIXME not async!
