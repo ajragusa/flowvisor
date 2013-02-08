@@ -26,7 +26,7 @@ public interface Flowvisor extends FVAppConfig {
 	public static String HOST = "host";
 	public static String CONFIG = "config_name";
 	public static String DB_VERSION = "db_version";
-        public static String CLEAR_FLOW_TABLE = "clear_table_on_connect";
+        public static String CLEAR_FLOW_TABLE = "clear_flow_table";
 	public static String FSCACHE = "fscache";
 	
 	// Table name

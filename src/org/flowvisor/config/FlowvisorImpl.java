@@ -43,7 +43,7 @@ public class FlowvisorImpl implements Flowvisor {
  	private static String GLOGFACILITY = "SELECT " + LOGFACILITY + " FROM FlowVisor WHERE id = ?";
  	private static String GTOPO = "SELECT " + TOPO + " FROM Flowvisor WHERE id = ?";
         private static String GCLFLWTBL = "SELECT " + CLEAR_FLOW_TABLE + " from Flowvisor where id = ?";
- 	private static String GFSTIME = "SELECT " + FSCACHE + " FROM Flowvisor WHERE id = ?";
+ 	private static String GFSTIME = "SELECT " + FSCACHE + " FROM FlowVisor WHERE id = ?";
  	private static String STRACKID = "UPDATE Flowvisor SET " + TRACK + " = ? WHERE id = ?";
 	private static String SSTATSID = "UPDATE Flowvisor SET " + STATS + " = ? WHERE id = ?";
 	private static String SFLOODPERM = "UPDATE Flowvisor SET " + FLOODPERM + " = ? WHERE id = ?";
@@ -384,13 +384,13 @@ public class FlowvisorImpl implements Flowvisor {
 		else
 		    throw new ConfigError("Clear Table on Connect not found");
 	    } catch (SQLException e) {
-		FVLog.log(LogLevel.WARN, null, e.getMessage());
+		FVLog.log(LogLevel.WARN, null, "doh!" + e.getMessage());
 	    } finally {
 		close(set);
 		close(ps);
 		close(conn);
-
 	    }
+	    FVLog.log(LogLevel.ALERT, null, "Uh... how did we make it here!");
 	    return null;
 
 	}
